@@ -102,7 +102,8 @@ WSGI_APPLICATION = 'mpghome.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway"
+        # default="postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway"
+         'default': dj_database_url.config(default=os.getenv('postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway'))
     )
 }
 
