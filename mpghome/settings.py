@@ -95,8 +95,11 @@ WSGI_APPLICATION = 'mpghome.wsgi.application'
 #     }
 # }
 
+
 DATABASES = {
-    'default': dj_database_url.parse('postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway')
+    'default': dj_database_url.config(
+        default="postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway"
+    )
 }
 
 
