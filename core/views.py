@@ -25,7 +25,7 @@ def menu_list(request):
 # def product_list(request):
 #     products = list(Product.objects.values())
 #     return JsonResponse(products, safe=False)
-def product_list_api(request):
+def products_list(request):
     products = Product.objects.all()
     data = []
 
@@ -34,12 +34,12 @@ def product_list_api(request):
         data.append({
             "name": product.name,
             "image": image_url,
-            "category" : product.category,
-            "descriptions" : product.description,
-            "meta_title" : product.meta_title,
-            "meta_description" : product.meta_description,
-            "og_title" : product.og_title,
-            "og_decriptions" : product.og_description
+            "category": product.category.name,  # or product.category.id if you want the ID
+            "descriptions": product.description,
+            "meta_title": product.meta_title,
+            "meta_description": product.meta_description,
+            "og_title": product.og_title,
+            "og_decriptions": product.og_description
         })
 
     return JsonResponse(data, safe=False)
