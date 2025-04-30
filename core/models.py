@@ -112,7 +112,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    # slug = models.SlugField(unique=True, blank=True, null=True) # example slug field
     category = models.ForeignKey(Category,related_name='product', on_delete= models.CASCADE)
     image = models.ImageField(upload_to='products/')
     description = models.TextField(blank=True, null=True)
