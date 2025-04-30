@@ -34,7 +34,7 @@ def product_list_api(request):
         data.append({
             "name": product.name,
             "image": image_url,
-            "category": product.category.name,  # or product.category.id if you want the ID
+            "category": product.category.category_name,  # or product.category.id if you want the ID
             "descriptions": product.description,
             "meta_title": product.meta_title,
             "meta_description": product.meta_description,
