@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'mpghome.urls'
@@ -111,7 +112,7 @@ WSGI_APPLICATION = 'mpghome.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@postgres.railway.internal:5432/railway')
+        default=os.getenv('DATABASE_URL', 'postgresql://postgres:IVpKuMGaqpcdwfLTBzmWRagiLKghWSfs@yamabiko.proxy.rlwy.net:34819/railway')
     )
 }
 
