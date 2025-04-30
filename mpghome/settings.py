@@ -27,11 +27,7 @@ SECRET_KEY = 'django-insecure-u&dzqi5ocwne@krcs&1v&4gn3(4@(d%9l=7*5rss_ksn23da9x
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'mpg-backend-production.up.railway.app',
-]
+ALLOWED_HOSTS = ['https://mpg-backend-production.up.railway.app']
 
 # ALLOWED_HOSTS = ['*']  # Set domains/IPs in production
 CSRF_TRUSTED_ORIGINS = [

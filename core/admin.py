@@ -5,9 +5,9 @@ from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, 
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 
-admin.site.site_header = "MPGStone.co.uk"
-admin.site.site_title = "MPGStone Admin Portal"
-admin.site.index_title = "Welcome to MPGStone Admin"
+# admin.site.site_header = "MPGStone.co.uk"
+# admin.site.site_title = "MPGStone Admin Portal"
+# admin.site.index_title = "Welcome to MPGStone Admin"
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
