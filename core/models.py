@@ -112,7 +112,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    # slug = models.SlugField(unique=True, blank=True, null=True) # example slug field
+    slug = models.SlugField(unique=True, blank=True, null=True) # example slug field
     category = models.ForeignKey(Category,related_name='product', on_delete= models.CASCADE)
     image = models.ImageField(upload_to='products/')
     description = models.TextField(blank=True, null=True)
@@ -123,10 +123,10 @@ class Product(models.Model):
     og_title = models.CharField(max_length=255, blank=True, null=True)
     og_description = models.TextField(blank=True, null=True)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.name)
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
