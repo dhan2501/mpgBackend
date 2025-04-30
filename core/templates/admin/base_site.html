@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+
+{% block extrastyle %}
+<style>
+    /* Header bar background color */
+    #header {
+        background-color: #c62828 !important; /* 🔴 Red */
+    }
+
+    /* Brand text (top-left) */
+    #branding h1 {
+        color: white !important;
+    }
+
+    /* Navbar text (top-right) */
+    #user-tools {
+        color: #fff !important;
+    }
+
+    /* Breadcrumb bar (just below header) */
+    .breadcrumbs {
+        background-color: #e53935 !important; /* Slightly lighter red */
+        color: white !important;
+    }
+
+    .breadcrumbs a {
+        color: #ffeaea !important;
+    }
+</style>
+{% endblock %}

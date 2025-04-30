@@ -1,0 +1,36 @@
+<!-- templates/subscribe.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscribe</title>
+</head>
+<body>
+
+<h2>Subscribe to our Newsletter</h2>
+
+<form id="subscribe-form">
+    <input type="email" id="email" placeholder="Enter your email" required />
+    <button type="submit">Subscribe</button>
+</form>
+
+<p id="response-message"></p>
+
+<script>
+document.getElementById('subscribe-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const response = await fetch('/api/subscribe/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    });
+    const result = await response.json();
+    document.getElementById('response-message').innerText = result.message || result.error;
+});
+</script>
+
+</body>
+</html>

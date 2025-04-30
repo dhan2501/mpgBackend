@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Home Page</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background: #f9f9f9; }
+        h1 { color: #333; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        a { text-decoration: none; color: #007bff; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Available API Endpoints</h1>
+    <!-- <ul>
+        {% for name, url in api_links.items %}
+            <li><a href="{{ url }}" target="_blank">{{ name }}</a></li>
+        {% endfor %}
+    </ul> -->
+    <ul>
+      <li><a href="/api/banners/" target="_blank">Banners</a></li>
+      <li><a href="/api/categories/" target="_blank">Categories</a></li>
+      <li><a href="/api/blogs/" target="_blank">Blogs</a></li>
+      <li><a href="/api/reviews/">Reviews</a></li>
+      <li><a href="/api/menuitems/">Menu List</a></li>
+      <li><a href="/api/products/">Products List</a></li>
+  </ul>
+</body>
+</html>
