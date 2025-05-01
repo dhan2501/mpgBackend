@@ -45,6 +45,8 @@ def product_list_api(request):
 
     return JsonResponse(data, safe=False)
 
+
+
 def category_list(request):
     # categories = list(Category.objects.values())
     # return JsonResponse(categories, safe=False)
