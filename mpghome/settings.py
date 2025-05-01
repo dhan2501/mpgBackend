@@ -157,7 +157,7 @@ USE_TZ = True
 # STATIC_URL = 'static/'
 
 
-
+  
 
 # === Static & Media Files ===
 STATIC_URL = '/static/'
