@@ -33,6 +33,7 @@ def product_list_api(request):
         image_url = request.build_absolute_uri(product.image.url) if product.image else None
         data.append({
             "name": product.name,
+            "slug" : product.slug,
             "image": image_url,
             "category": product.category.category_name,  # or product.category.id if you want the ID
             "descriptions": product.description,
