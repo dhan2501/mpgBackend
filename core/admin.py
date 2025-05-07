@@ -5,6 +5,8 @@ from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, 
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
+from ckeditor.widgets import CKEditorWidget
+from django import forms
 
 
 admin.site.site_header = "MPGStone.co.uk"
@@ -70,18 +72,41 @@ class BannerAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Image'
 
 
+# @admin.register(Blog)
+# class BlogAdmin(admin.ModelAdmin):
+#     list_display = ('title', 'date_posted', 'image_tag')
+#     prepopulated_fields = {'slug': ('title',)}
+#     list_filter = ('title', 'date_posted')
+
+#     def image_tag(self, obj):
+#         if obj.image:
+#             return format_html('<img src="{}" width="100" height="auto" />', obj.image.url)
+#         return "-"
+#     image_tag.short_description = 'Image'
+
+# Define a custom form for the Blog model
+class BlogAdminForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = '__all__'  # Include all fields in the form
+        widgets = {
+            'content': CKEditorWidget(),  # Using CKEditor for the content field
+        }
+
+# Register Blog model with a custom admin interface
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_posted', 'image_tag')
-    prepopulated_fields = {'slug': ('title',)}
-    list_filter = ('title', 'date_posted')
+    form = BlogAdminForm  # Use the custom form with CKEditor
+    list_display = ('title', 'date_posted', 'image_tag')  # Customize list display
+    prepopulated_fields = {'slug': ('title',)}  # Automatically generate slug from title
+    list_filter = ('title', 'date_posted')  # Filter by title and date posted
 
+    # Custom method for displaying image as a thumbnail in the list view
     def image_tag(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="100" height="auto" />', obj.image.url)
         return "-"
-    image_tag.short_description = 'Image'
-
+    image_tag.short_description = 'Image'  # Customize column name for the image tag
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):

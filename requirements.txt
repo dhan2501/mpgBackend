@@ -14,3 +14,4 @@ djangorestframework==3.16.0
 python-dotenv
 django-cors-headers==4.7.0
 django-filebrowser==4.0.3
+django-ckeditor==6.1.0

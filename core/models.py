@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.utils.text import slugify
 from django.utils.timezone import now
+from ckeditor.fields import RichTextField
 
 
 # class Logo(models.Model):
@@ -155,7 +156,8 @@ class Blog(models.Model):
     # category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, related_name='blogs', blank=True)
     meta_title = models.CharField(max_length=255, help_text="Meta title for SEO", blank=True)
     meta_description = models.TextField(help_text="Meta description for SEO", blank=True)
-    content = models.TextField(help_text="Page content")
+    # content = models.TextField(help_text="Page content")
+    content = RichTextField()
     date_posted = models.DateTimeField(default=now)
     # total_views = models.PositiveIntegerField(default=0)
 
