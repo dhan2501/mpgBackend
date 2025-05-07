@@ -185,3 +185,15 @@ class Subscriber(models.Model):
 
     def __str__(self):
         return self.email
+    
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    verified = models.BooleanField(default=False)
+    profile_image = models.ImageField(upload_to='testimonials/', blank=True, null=True)
+    rating = models.PositiveIntegerField(default=5)
+    title = models.CharField(max_length=255)
+    testimonial = models.TextField()
+
+    def __str__(self):
+        return f"{self.name} - {self.title}"

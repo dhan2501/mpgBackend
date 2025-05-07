@@ -24,5 +24,6 @@ urlpatterns = [
     path('products/<int:pk>/', views.products_detail, name='product_detail'),
     path('api/subscribe/', views.subscribe_api, name='subscribe_api'),
     path('subscribe/', views.subscribe_page, name='subscribe_page'),
+    path('api/testimonials/', views.testimonial_list, name='testimonial-list'),
     # path('products/<slug:category_slug>/<int:pk>/', views.products_detail, name='product_detail'),
 ]

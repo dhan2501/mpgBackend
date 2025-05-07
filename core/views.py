@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 import json
-from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber
+from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ProductReview
 from django.views.decorators.csrf import csrf_exempt
@@ -332,3 +332,27 @@ def subscribe_api(request):
 
 def subscribe_page(request):
     return render(request, 'subscribe.html')
+
+
+def testimonial_list(request):
+    testimonials = Testimonial.objects.all()
+    testimonial_data = []
+
+    for t in testimonials:
+        image_url = request.build_absolute_uri(t.profile_image.url) if t.profile_image else None
+        testimonial_data.append({
+            "id": t.id,
+            "name": t.name,
+            "verified": t.verified,
+            "profile_image": image_url,
+            "rating": t.rating,
+            "title": t.title,
+            "testimonial": t.testimonial
+        })
+
+    response = {
+        "current_time": now().strftime("%Y-%m-%d %H:%M:%S"),
+        "testimonials": testimonial_data
+    }
+
+    return JsonResponse(response)

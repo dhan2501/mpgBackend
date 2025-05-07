@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.utils.safestring import mark_safe
+
 
 admin.site.site_header = "MPGStone.co.uk"
 admin.site.site_title = "MPGStone Admin Portal"
@@ -90,3 +92,19 @@ class ProductReviewAdmin(admin.ModelAdmin):
 @admin.register(Subscriber)
 class SubscribeAmin(admin.ModelAdmin):
     list_display = ('id','email')
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ('name', 'title', 'verified', 'rating')
+    list_filter = ('verified', 'rating')
+    search_fields = ('name', 'title', 'testimonial')
+    readonly_fields = ('profile_image_preview',)
+    fields = ('name', 'verified', 'profile_image', 'profile_image_preview', 'rating', 'title', 'testimonial')
+    
+    def profile_image_preview(self, obj):
+        if obj.profile_image:
+            return mark_safe(f'<img src="{obj.profile_image.url}" width="100" height="100" style="object-fit:cover; border-radius:8px;" />')
+        return "No image"
+
+    profile_image_preview.short_description = 'Image Preview'

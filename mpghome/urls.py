@@ -19,12 +19,15 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from filebrowser.sites import site
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.home, name="home"),
     path('', include('core.urls')),
+    path('admin/filebrowser/', site.urls),
+    path('grappelli/', include('grappelli.urls')),
 ]
 
 if settings.DEBUG:
