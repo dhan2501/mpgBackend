@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from  core.serializers import ProductSerializer, ProductReviewSerializer
 from .models import Product, ProductReview
 
+from django.utils.timezone import now
+
 def index(request):
     return render(request, "index.html")
 
@@ -87,6 +89,25 @@ def banner_api(request):
 #     blogs = list(Blog.objects.values())
 #     return JsonResponse(blogs, safe=False)
 
+# def blog_list(request):
+#     blogs = Blog.objects.all()
+#     blog_data = []
+
+#     for blog in blogs:
+#         image_url = request.build_absolute_uri(blog.image.url) if blog.image else None
+#         blog_data.append({
+#             "id": blog.id,
+#             "title": blog.title,
+#             "descriptions": blog.description,
+#             "image": image_url,
+#             "meta_title" : blog.meta_title,
+#             "meta_description" : blog.meta_description
+#             # add other fields if needed
+#         })
+    
+#     return JsonResponse(blog_data, safe=False)
+
+
 def blog_list(request):
     blogs = Blog.objects.all()
     blog_data = []
@@ -96,14 +117,21 @@ def blog_list(request):
         blog_data.append({
             "id": blog.id,
             "title": blog.title,
-            "descriptions": blog.description,
+            "slug": blog.slug,
+            "description": blog.description,
             "image": image_url,
-            "meta_title" : blog.meta_title,
-            "meta_description" : blog.meta_description
-            # add other fields if needed
+            "meta_title": blog.meta_title,
+            "meta_description": blog.meta_description,
+            "content": blog.content,
+            "date_posted": blog.date_posted.strftime("%Y-%m-%d %H:%M:%S") if blog.date_posted else None
         })
-    
-    return JsonResponse(blog_data, safe=False)
+
+    response = {
+        "current_time": now().strftime("%Y-%m-%d %H:%M:%S"),
+        "blogs": blog_data
+    }
+
+    return JsonResponse(response)
 
 def product_api(request, pk):
     product = get_object_or_404(Product, id=pk)
