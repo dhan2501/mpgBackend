@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'corsheaders',
-    'filebrowser',
-    'grappelli',  # Required for filebrowser UI
 ]
    
 MIDDLEWARE = [
