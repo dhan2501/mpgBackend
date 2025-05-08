@@ -174,12 +174,13 @@ class ProductReview(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     name = models.CharField(max_length=100)
     email = models.EmailField()
+    rating = models.PositiveIntegerField(default=5)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)  # Inactive by default
 
     def __str__(self):
-        return f"Review by {self.name}"  
+        return f"Review by {self.name} on {self.product.name}"
     
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
@@ -199,3 +200,4 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.title}"
+

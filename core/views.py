@@ -15,6 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from  core.serializers import ProductSerializer, ProductReviewSerializer
 from .models import Product, ProductReview
 
+from rest_framework.views import APIView
+from .serializers import ReviewSerializer
+
 from django.utils.timezone import now
 
 def index(request):
@@ -34,6 +37,7 @@ def product_list_api(request):
     for product in products:
         image_url = request.build_absolute_uri(product.image.url) if product.image else None
         data.append({
+            "id" : product.id,
             "name": product.name,
             "slug" : product.slug,
             "image": image_url,
@@ -203,45 +207,45 @@ def product_detail(request, pk):
     except Product.DoesNotExist:
         return Response({'error': 'Product not found'}, status=404)
 
-@api_view(['GET'])
-def product_reviews(request, pk):
-    try:
-        reviews = ProductReview.objects.filter(product_id=pk, is_active=True)
-        serializer = ProductReviewSerializer(reviews, many=True)
-        return Response(serializer.data)
-    except ProductReview.DoesNotExist:
-        return Response([], status=200)
+# @api_view(['GET'])
+# def product_reviews(request, pk):
+#     try:
+#         reviews = ProductReview.objects.filter(product_id=pk, is_active=True)
+#         serializer = ProductReviewSerializer(reviews, many=True)
+#         return Response(serializer.data)
+#     except ProductReview.DoesNotExist:
+#         return Response([], status=200)
 
-@api_view(['GET', 'POST'])
-def reviews_list(request):
-    if request.method == 'GET':
-        reviews = ProductReview.objects.filter(is_active=True)
-        serializer = ProductReviewSerializer(reviews, many=True)
-        return Response(serializer.data)
+# @api_view(['GET', 'POST'])
+# def reviews_list(request):
+#     if request.method == 'GET':
+#         reviews = ProductReview.objects.filter(is_active=True)
+#         serializer = ProductReviewSerializer(reviews, many=True)
+#         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = ProductReviewSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Review submitted!'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'POST':
+#         serializer = ProductReviewSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({'message': 'Review submitted!'}, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # without popup thankyou page
-# def submit_review(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         email = request.POST.get('email')
-#         comment = request.POST.get('comment')
+def submit_review(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        comment = request.POST.get('comment')
 
-#         ProductReview.objects.create(
-#             name=name,
-#             email=email,
-#             comment=comment,
-#             is_active=False  # Default; can be omitted
-#         )
-#         return redirect('thank_you')  # Redirect after submission
+        ProductReview.objects.create(
+            name=name,
+            email=email,
+            comment=comment,
+            is_active=False  # Default; can be omitted
+        )
+        return redirect('thank_you')  # Redirect after submission
 
-#     return render(request, 'reviews/review_form.html')
+    return render(request, 'reviews/review_form.html')
 
 # With popup
 def submit_review(request):
@@ -267,8 +271,7 @@ def thank_you(request):
 
 
 
-from django.shortcuts import render
-from .models import Blog
+
 
 def create_blog(request):
     success = False
@@ -356,3 +359,31 @@ def testimonial_list(request):
     }
 
     return JsonResponse(response)
+
+
+
+class CreateReviewAPIView(APIView):
+    def get(self, request, product_id):
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        reviews = ProductReview.objects.filter(product=product, is_active=True).order_by('-created_at')
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, product_id):
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        data['product'] = product.id
+
+        serializer = ReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

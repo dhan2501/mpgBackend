@@ -25,3 +25,8 @@ class TestimonialSerializer(serializers.ModelSerializer):
         if obj.profile_image and request:
             return request.build_absolute_uri(obj.profile_image.url)
         return None
+    
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductReview
+        fields = ['id', 'product', 'name', 'email', 'rating', 'comment', 'created_at']

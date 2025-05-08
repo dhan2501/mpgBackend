@@ -110,9 +110,13 @@ class BlogAdmin(admin.ModelAdmin):
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'created_at', 'is_active')
+    list_display = ('name', 'email', 'display_rating', 'created_at', 'is_active')
     list_filter = ('is_active', 'created_at')
     search_fields = ('name', 'email', 'comment')
+
+    def display_rating(self, obj):
+        return '★' * obj.rating + '☆' * (5 - obj.rating)
+    display_rating.short_description = 'Rating'
 
 @admin.register(Subscriber)
 class SubscribeAmin(admin.ModelAdmin):
