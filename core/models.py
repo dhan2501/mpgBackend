@@ -3,7 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.utils.text import slugify
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 # class Logo(models.Model):
 #     title = models.CharField(max_length=255, blank=True, null=True)
@@ -201,3 +201,12 @@ class Testimonial(models.Model):
     def __str__(self):
         return f"{self.name} - {self.title}"
 
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = PhoneNumberField(blank=False, null=False) # Default region can be changed
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"

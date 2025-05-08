@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
@@ -137,3 +137,11 @@ class TestimonialAdmin(admin.ModelAdmin):
         return "No image"
 
     profile_image_preview.short_description = 'Image Preview'
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'email', 'phone_number', 'message', 'created_at']
+    search_fields = ['name', 'email', 'phone_number', 'message']
+    list_filter = ['created_at']
+    readonly_fields = ['id', 'created_at']

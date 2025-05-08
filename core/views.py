@@ -16,8 +16,7 @@ from  core.serializers import ProductSerializer, ProductReviewSerializer
 from .models import Product, ProductReview
 
 from rest_framework.views import APIView
-from .serializers import ReviewSerializer
-
+from .serializers import ReviewSerializer, ContactMessageSerializer
 from django.utils.timezone import now
 
 def index(request):
@@ -386,4 +385,14 @@ class CreateReviewAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class ContactMessageView(APIView):
+    def post(self, request):
+        serializer = ContactMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Message received successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

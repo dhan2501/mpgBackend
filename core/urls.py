@@ -26,5 +26,6 @@ urlpatterns = [
     path('subscribe/', views.subscribe_page, name='subscribe_page'),
     path('api/testimonials/', views.testimonial_list, name='testimonial-list'),
     path('api/products/<int:product_id>/reviews/', views.CreateReviewAPIView.as_view(), name='create-review'),
+    path('api/contact/', views.ContactMessageView.as_view(), name='contact-message'),
     # path('products/<slug:category_slug>/<int:pk>/', views.products_detail, name='product_detail'),
 ]

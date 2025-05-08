@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import ProductReview, Product, Testimonial
-
+from .models import ProductReview, Product, Testimonial, ContactMessage
+from phonenumber_field.serializerfields import PhoneNumberField as PhoneNumberSerializerField
 class ProductReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReview
@@ -30,3 +30,10 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReview
         fields = ['id', 'product', 'name', 'email', 'rating', 'comment', 'created_at']
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    phone_number = serializers.CharField()
+    class Meta:
+        model = ContactMessage
+        fields = ['id', 'name', 'email', 'phone_number', 'message']
