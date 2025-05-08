@@ -49,9 +49,6 @@ class ProductAdmin(admin.ModelAdmin):
     short_description.short_description = 'Description'  # Set the column name to 'Description'
 
 
-# @admin.register(Logo)
-# class LogoAdmin(admin.ModelAdmin):
-#     list_display = ('title', 'image', 'alt_text')
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):

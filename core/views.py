@@ -88,28 +88,6 @@ def banner_api(request):
 
     return JsonResponse(data, safe=False)
 
-# def blog_list(request):
-#     blogs = list(Blog.objects.values())
-#     return JsonResponse(blogs, safe=False)
-
-# def blog_list(request):
-#     blogs = Blog.objects.all()
-#     blog_data = []
-
-#     for blog in blogs:
-#         image_url = request.build_absolute_uri(blog.image.url) if blog.image else None
-#         blog_data.append({
-#             "id": blog.id,
-#             "title": blog.title,
-#             "descriptions": blog.description,
-#             "image": image_url,
-#             "meta_title" : blog.meta_title,
-#             "meta_description" : blog.meta_description
-#             # add other fields if needed
-#         })
-    
-#     return JsonResponse(blog_data, safe=False)
-
 
 def blog_list(request):
     blogs = Blog.objects.all()
@@ -160,49 +138,6 @@ def reviews_list(request):
     reviews = list(ProductReview.objects.values())
     return JsonResponse(reviews, safe=False)
 
-# csrf_exempt
-# @api_view(['POST'])
-# def reviews_list(request):
-#     print("POST DATA:", request.data)  # 👈 Debug
-#     serializer = ProductReviewSerializer(data=request.data)
-#     if serializer.is_valid():
-#         review = serializer.save()
-#         print("Saved Review:", review)  # 👈 Debug
-#         return Response({'message': 'Review submitted successfully!'}, status=status.HTTP_201_CREATED)
-#     else:
-#         print("Serializer errors:", serializer.errors)  # 👈 Debug
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @csrf_exempt  # Exempt CSRF for frontend JS forms
-# @api_view(['GET', 'POST'])
-# def reviews_list(request):
-#     if request.method == 'GET':
-#         reviews = ProductReview.objects.all()
-#         serializer = ProductReviewSerializer(reviews, many=True)
-#         return Response(serializer.data)
-
-#     elif request.method == 'POST':
-#         serializer = ProductReviewSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'message': 'Review submitted!'}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @csrf_exempt  # Allow AJAX POST without CSRF token
-# @api_view(['GET', 'POST'])
-# def reviews_list(request):
-#     if request.method == 'GET':
-#         reviews = ProductReview.objects.all()
-#         serializer = ProductReviewSerializer(reviews, many=True)
-#         return Response(serializer.data)
-
-#     elif request.method == 'POST':
-#         serializer = ProductReviewSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'message': 'Review submitted!'}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 def product_detail(request, pk):
@@ -213,28 +148,6 @@ def product_detail(request, pk):
     except Product.DoesNotExist:
         return Response({'error': 'Product not found'}, status=404)
 
-# @api_view(['GET'])
-# def product_reviews(request, pk):
-#     try:
-#         reviews = ProductReview.objects.filter(product_id=pk, is_active=True)
-#         serializer = ProductReviewSerializer(reviews, many=True)
-#         return Response(serializer.data)
-#     except ProductReview.DoesNotExist:
-#         return Response([], status=200)
-
-# @api_view(['GET', 'POST'])
-# def reviews_list(request):
-#     if request.method == 'GET':
-#         reviews = ProductReview.objects.filter(is_active=True)
-#         serializer = ProductReviewSerializer(reviews, many=True)
-#         return Response(serializer.data)
-
-#     elif request.method == 'POST':
-#         serializer = ProductReviewSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'message': 'Review submitted!'}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # without popup thankyou page
 def submit_review(request):
