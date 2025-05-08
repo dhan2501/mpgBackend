@@ -16,3 +16,4 @@ django-cors-headers==4.7.0
 django-filebrowser==4.0.3
 django-ckeditor==6.1.0
 phonenumbers==9.0.4
+django-phonenumber-field==8.1.0
