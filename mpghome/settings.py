@@ -81,6 +81,9 @@ TEMPLATES = [
         },
     },
 ]
+CORS_ALLOWED_ORIGINS = [
+    "https://myfrontend.vercel.app",
+]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
