@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
@@ -15,6 +15,7 @@ admin.site.index_title = "Welcome to MPGStone Admin"
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+
     # list_display = ('category_name', 'slug', 'is_active')  # Columns to display in the admin list
     list_display = ('image_tag','category_name', 'slug', 'is_active')  # add 'image_tag'
     list_display_links = ('image_tag', 'category_name')  # Make 'id' and 'name' clickable
@@ -26,8 +27,12 @@ class CategoryAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Image'
 
 
+class ProductAttributeInline(admin.TabularInline):
+    model = ProductAttribute
+    extra = 1
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductAttributeInline]
     list_display = ('id', 'image_tag', 'name', 'category', 'short_description')  # 👈 Add image_tag here
     list_display_links = ('image_tag', 'name')  # Make 'id' and 'name' clickable
 
@@ -145,3 +150,4 @@ class ContactMessageAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'phone_number', 'message']
     list_filter = ['created_at']
     readonly_fields = ['id', 'created_at']
+

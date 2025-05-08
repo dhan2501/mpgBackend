@@ -182,6 +182,15 @@ class ProductReview(models.Model):
     def __str__(self):
         return f"Review by {self.name} on {self.product.name}"
     
+
+class ProductAttribute(models.Model):
+    product = models.ForeignKey(Product, related_name='attributes', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)  # e.g. Materials, Application
+    value = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.product.name}"
+    
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)

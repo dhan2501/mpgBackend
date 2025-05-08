@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 import json
-from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial
+from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ProductReview
 from django.views.decorators.csrf import csrf_exempt
@@ -139,13 +139,20 @@ def blog_list(request):
 def product_api(request, pk):
     product = get_object_or_404(Product, id=pk)
     image_url = request.build_absolute_uri(product.image.url) if product.image else None
+
+    # Fetch all attributes related to the product
+    attributes = product.attributes.all().values('title', 'value')
+
     data = {
         "id": product.id,
         "name": product.name,
         "description": product.description,
         "image": image_url,
+        "attributes": list(attributes),  # Convert queryset to list of dicts
     }
+
     return JsonResponse(data)
+
     
 @csrf_exempt
 @api_view(['GET'])
