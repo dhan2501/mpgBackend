@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'core',
     'corsheaders',
     'ckeditor',
+    'phonenumber_field'
 ]
    
 MIDDLEWARE = [
