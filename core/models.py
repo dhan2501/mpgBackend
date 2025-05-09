@@ -210,3 +210,19 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+    
+
+
+class ContactDetail(models.Model):
+    phones = models.TextField(help_text="Separate multiple numbers with commas")
+    emails = models.TextField(help_text="Separate multiple emails with commas")
+    address = models.TextField()
+
+    def get_phone_list(self):
+        return [p.strip() for p in self.phones.split(',') if p.strip()]
+
+    def get_email_list(self):
+        return [e.strip() for e in self.emails.split(',') if e.strip()]
+
+    def __str__(self):
+        return f"{self.phones} - {self.emails}"

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute, ContactDetail
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
@@ -146,3 +146,15 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     readonly_fields = ['id', 'created_at']
 
+@admin.register(ContactDetail)
+class ContactDetailAdmin(admin.ModelAdmin):
+    list_display = ('display_phones', 'display_emails', 'address')
+    search_fields = ('phones', 'emails', 'address')
+
+    def display_phones(self, obj):
+        return ", ".join(obj.get_phone_list())
+    display_phones.short_description = 'Phone Numbers'
+
+    def display_emails(self, obj):
+        return ", ".join(obj.get_email_list())
+    display_emails.short_description = 'Email Addresses'

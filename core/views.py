@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 import json
-from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute, SocialMediaLink
+from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute, SocialMediaLink, ContactDetail
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ProductReview
 from django.views.decorators.csrf import csrf_exempt
@@ -9,14 +9,14 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from django.views.decorators.csrf import csrf_exempt
 # from .serializers import ProductReviewSerializer
 from  core.serializers import ProductSerializer, ProductReviewSerializer
 from .models import Product, ProductReview
 
 from rest_framework.views import APIView
-from .serializers import ReviewSerializer, ContactMessageSerializer
+from .serializers import ReviewSerializer, ContactMessageSerializer, ContactDetailSerializer
 from django.utils.timezone import now
 
 def index(request):
@@ -339,3 +339,11 @@ def social_media_links(request):
     }
 
     return JsonResponse(response)
+
+
+class ContactDetailView(generics.RetrieveAPIView):
+    queryset = ContactDetail.objects.all()
+    serializer_class = ContactDetailSerializer
+
+    def get_object(self):
+        return ContactDetail.objects.first()

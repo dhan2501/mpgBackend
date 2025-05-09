@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/products/<int:product_id>/reviews/', views.CreateReviewAPIView.as_view(), name='create-review'),
     path('api/contact/', views.ContactMessageView.as_view(), name='contact-message'),
     path('api/social-media/', views.social_media_links, name='social_media_links'),
+    path('api/contactdetails/', views.ContactDetailView.as_view(), name='contact-detail'),
 ]
