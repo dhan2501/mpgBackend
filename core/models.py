@@ -73,6 +73,7 @@ class SocialMediaLink(models.Model):
         ('instagram', 'Instagram'),
         ('linkedin', 'LinkedIn'),
         ('youtube', 'YouTube'),
+        ('pinterest', 'Pinterest'),
         ('other', 'Other'),
     ])
     url = models.URLField(max_length=200, unique=True, blank=True)
