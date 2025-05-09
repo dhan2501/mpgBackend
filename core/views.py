@@ -231,8 +231,12 @@ def products_detail(request, pk):
 
 @csrf_exempt  # For simplicity, exempt CSRF (better to use csrf token in production)
 def subscribe_api(request):
+    # if request.method == "GET":
+    #     return JsonResponse({"message": "API is working, send POST to subscribe"})
     if request.method == "GET":
-        return JsonResponse({"message": "API is working, send POST to subscribe"})
+        subscribers = Subscriber.objects.all().values('id', 'email')
+        return JsonResponse({"subscribers": list(subscribers)}, safe=False)
+    
     elif request.method == "POST":
         try:
             data = json.loads(request.body)
