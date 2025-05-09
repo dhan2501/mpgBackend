@@ -66,12 +66,7 @@ class MenuItem(models.Model):
 
 
 class SocialMediaLink(models.Model):
-    LOCATION_CHOICES = [
-        ('header', 'Header'),
-        ('footer', 'Footer'),
-        ('both', 'Both'),
-    ]
-
+    
     platform = models.CharField(max_length=50, choices=[
         ('facebook', 'Facebook'),
         ('twitter', 'Twitter'),
@@ -81,17 +76,12 @@ class SocialMediaLink(models.Model):
         ('other', 'Other'),
     ])
     url = models.URLField(max_length=200, unique=True, blank=True)
-    location = models.CharField(max_length=10, choices=LOCATION_CHOICES, default='both')
+
     icon_class = models.CharField(max_length=100, blank=True, null=True)  # Font Awesome or custom icon classes
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)  
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.get_platform_display()} ({self.location})"
+    class Meta:
+        ordering = ['platform']
 
 class Category(models.Model):
     category_name = models.CharField(max_length=250)

@@ -59,9 +59,7 @@ class MenuItemAdmin(admin.ModelAdmin):
 
 @admin.register(SocialMediaLink)
 class SocialMediaLinkAdmin(admin.ModelAdmin):
-    list_display = ('platform', 'url', 'location', 'is_active')
-    list_filter = ('location', 'is_active')
-    search_fields = ('platform', 'url')
+    list_display = ('platform', 'url', 'is_active')
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):

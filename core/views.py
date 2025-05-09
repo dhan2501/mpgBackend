@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 import json
-from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute
+from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute, SocialMediaLink
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ProductReview
 from django.views.decorators.csrf import csrf_exempt
@@ -316,3 +316,26 @@ class ContactMessageView(APIView):
             serializer.save()
             return Response({'message': 'Message received successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+def social_media_links(request):
+    links = SocialMediaLink.objects.all()
+    link_data = []
+
+    for link in links:
+        link_data.append({
+            "id": link.id,
+            "platform": link.platform,
+            "iconclass" : link.icon_class,
+            "url": link.url if hasattr(link, 'url') else None  # Add this field in your model if needed
+            
+        })
+
+    response = {
+        "current_time": now().strftime("%Y-%m-%d %H:%M:%S"),
+        "social_media_links": link_data
+    }
+
+    return JsonResponse(response)
