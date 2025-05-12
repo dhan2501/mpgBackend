@@ -37,6 +37,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductAttributeInline]
     list_display = ('id', 'image_tag', 'name', 'category', 'short_description')  # 👈 Add image_tag here
     list_display_links = ('image_tag', 'name')  # Make 'id' and 'name' clickable
+    list_filter = ['category']
 
     def image_tag(self, obj):
         if obj.image:  # assuming your model has an ImageField named `image`
