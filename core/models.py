@@ -88,6 +88,8 @@ class Category(models.Model):
     category_name = models.CharField(max_length=250)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     image = models.ImageField(upload_to='categories/', null=True, blank=True) 
+    short_description = models.TextField(blank=True, null=True)
+    description = RichTextField(blank=True, null=True)  # <-- CKEditor field
     is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):

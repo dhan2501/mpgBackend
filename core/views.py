@@ -64,6 +64,8 @@ def category_list(request):
             "category_name": category.category_name,
             "slug": category.slug,
             "image": request.build_absolute_uri(category.image.url) if category.image else None,
+            "short_description" : category.short_description,
+            "descriptions" : category.description,
             "is_active": category.is_active
         })
 

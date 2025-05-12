@@ -15,10 +15,12 @@ admin.site.index_title = "Welcome to MPGStone Admin"
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('image_tag', 'category_name', 'slug', 'is_active', 'product_count')  # Added product_count
+    list_display_links = ('image_tag', 'category_name')  # Make 'image' and 'name' clickable
 
-    # list_display = ('category_name', 'slug', 'is_active')  # Columns to display in the admin list
-    list_display = ('image_tag','category_name', 'slug', 'is_active')  # add 'image_tag'
-    list_display_links = ('image_tag', 'category_name')  # Make 'id' and 'name' clickable
+    def product_count(self, obj):
+        return obj.product.count()
+    product_count.short_description = 'Product Count'
 
     def image_tag(self, obj):
         if obj.image:
