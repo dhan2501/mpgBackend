@@ -40,6 +40,15 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 
 
 class ContactDetailSerializer(serializers.ModelSerializer):
+    phones = serializers.SerializerMethodField()
+    emails = serializers.SerializerMethodField()
+
     class Meta:
         model = ContactDetail
-        fields = '__all__'
+        fields = ['phones', 'emails', 'address']
+
+    def get_phones(self, obj):
+        return obj.get_phone_list()
+
+    def get_emails(self, obj):
+        return obj.get_email_list()

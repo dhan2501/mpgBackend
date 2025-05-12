@@ -346,8 +346,9 @@ def social_media_links(request):
 
 
 class ContactDetailView(generics.RetrieveAPIView):
-    queryset = ContactDetail.objects.all()
+    
     serializer_class = ContactDetailSerializer
 
     def get_object(self):
+        # Return the first ContactDetail entry
         return ContactDetail.objects.first()
