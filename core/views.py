@@ -19,6 +19,8 @@ from rest_framework.views import APIView
 from .serializers import ReviewSerializer, ContactMessageSerializer, ContactDetailSerializer
 from django.utils.timezone import now
 
+from django.views.decorators.http import require_GET
+
 def index(request):
     return render(request, "index.html")
 
@@ -29,23 +31,57 @@ def menu_list(request):
 # def product_list(request):
 #     products = list(Product.objects.values())
 #     return JsonResponse(products, safe=False)
-def product_list_api(request):
-    products = Product.objects.all()
-    data = []
+# def product_list_api(request):
+#     products = Product.objects.all()
+#     data = []
 
+#     for product in products:
+#         image_url = request.build_absolute_uri(product.image.url) if product.image else None
+#         data.append({
+#             "id" : product.id,
+#             "name": product.name,
+#             "slug" : product.slug,
+#             "image": image_url,
+#             "category": product.category.category_name,  # or product.category.id if you want the ID
+#             "descriptions": product.description,
+#             "meta_title": product.meta_title,
+#             "meta_description": product.meta_description,
+#             "og_title": product.og_title,
+#             "og_decriptions": product.og_description
+#         })
+
+#     return JsonResponse(data, safe=False)
+@require_GET
+def product_list_api(request):
+    category_name = request.GET.get('category')
+    limit = request.GET.get('limit')
+
+    products = Product.objects.all()
+
+    if category_name:
+        products = products.filter(category__category_name__iexact=category_name)
+
+    if limit:
+        try:
+            limit = int(limit)
+            products = products[:limit]
+        except ValueError:
+            pass  # Ignore invalid limit values
+
+    data = []
     for product in products:
         image_url = request.build_absolute_uri(product.image.url) if product.image else None
         data.append({
-            "id" : product.id,
+            "id": product.id,
             "name": product.name,
-            "slug" : product.slug,
+            "slug": product.slug,
             "image": image_url,
-            "category": product.category.category_name,  # or product.category.id if you want the ID
+            "category": product.category.category_name,
             "descriptions": product.description,
             "meta_title": product.meta_title,
             "meta_description": product.meta_description,
             "og_title": product.og_title,
-            "og_decriptions": product.og_description
+            "og_decriptions": product.og_description,
         })
 
     return JsonResponse(data, safe=False)
@@ -134,11 +170,26 @@ def product_api(request, pk):
     return JsonResponse(data)
 
     
-@csrf_exempt
+# @csrf_exempt
+# @api_view(['GET'])
+# def reviews_list(request):
+#     reviews = list(ProductReview.objects.values())
+#     return JsonResponse(reviews, safe=False)
+
 @api_view(['GET'])
 def reviews_list(request):
-    reviews = list(ProductReview.objects.values())
-    return JsonResponse(reviews, safe=False)
+    product_id = request.GET.get('product_id')
+
+    if product_id:
+        try:
+            product_id = int(product_id)
+            reviews = ProductReview.objects.filter(product_id=product_id).values()
+        except ValueError:
+            return JsonResponse({"error": "Invalid product_id"}, status=400)
+    else:
+        reviews = ProductReview.objects.all().values()
+
+    return JsonResponse(list(reviews), safe=False)
 
 
 @api_view(['GET'])
