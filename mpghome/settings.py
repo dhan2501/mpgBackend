@@ -98,6 +98,8 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = 'mpghome.wsgi.application'
 
+TIME_ZONE = 'Europe/London'
+USE_TZ = True 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
