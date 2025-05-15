@@ -166,6 +166,7 @@ def product_list_api(request):
             "name": product.name,
             "slug": product.slug,
             "image": image_url,
+            "alt_text" : product.alt_text,
             "category": product.category.category_name,
             "descriptions": product.description,
             "meta_title": product.meta_title,
