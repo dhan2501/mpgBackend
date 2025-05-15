@@ -129,7 +129,7 @@ def menu_list(request):
 @require_GET
 def product_list_api(request):
     category_name = request.GET.get('category')
-    slug = request.GET.get('product-slug')  # updated to match URL param
+    slug = request.GET.get('slug')  # updated to match URL param
     limit = request.GET.get('limit')
 
     products = Product.objects.all()
