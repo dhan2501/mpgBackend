@@ -87,10 +87,49 @@ def menu_list(request):
 #     return JsonResponse(data, safe=False)
 
 
+# @require_GET
+# def product_list_api(request):
+#     category_name = request.GET.get('category')
+#     slug = request.GET.get('slug')
+#     limit = request.GET.get('limit')
+
+#     products = Product.objects.all()
+
+#     if slug:
+#         products = products.filter(slug=slug)
+
+#     if category_name:
+#         products = products.filter(category__category_name__iexact=category_name)
+
+#     if limit:
+#         try:
+#             limit = int(limit)
+#             products = products[:limit]
+#         except ValueError:
+#             pass  # Ignore invalid limit values
+
+#     data = []
+#     for product in products:
+#         image_url = request.build_absolute_uri(product.image.url) if product.image else None
+#         data.append({
+#             "id": product.id,
+#             "name": product.name,
+#             "slug": product.slug,
+#             "image": image_url,
+#             "category": product.category.category_name,
+#             "descriptions": product.description,
+#             "meta_title": product.meta_title,
+#             "meta_description": product.meta_description,
+#             "og_title": product.og_title,
+#             "og_decriptions": product.og_description,
+#         })
+
+#     return JsonResponse(data, safe=False)
+
 @require_GET
 def product_list_api(request):
     category_name = request.GET.get('category')
-    slug = request.GET.get('slug')
+    slug = request.GET.get('product-slug')  # updated to match URL param
     limit = request.GET.get('limit')
 
     products = Product.objects.all()
@@ -111,6 +150,10 @@ def product_list_api(request):
     data = []
     for product in products:
         image_url = request.build_absolute_uri(product.image.url) if product.image else None
+        attributes = [
+            {"title": attr.title, "value": attr.value}
+            for attr in product.attributes.all()
+        ]
         data.append({
             "id": product.id,
             "name": product.name,
@@ -122,6 +165,7 @@ def product_list_api(request):
             "meta_description": product.meta_description,
             "og_title": product.og_title,
             "og_decriptions": product.og_description,
+            "attributes": attributes,
         })
 
     return JsonResponse(data, safe=False)
