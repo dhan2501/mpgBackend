@@ -87,6 +87,7 @@ class SocialMediaLink(models.Model):
 class Category(models.Model):
     category_name = models.CharField(max_length=250)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to='categories/', null=True, blank=True) 
     short_description = models.TextField(blank=True, null=True)
     description = RichTextField(blank=True, null=True)  # <-- CKEditor field
@@ -109,6 +110,7 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True) # example slug field
     category = models.ForeignKey(Category,related_name='product', on_delete= models.CASCADE)
     image = models.ImageField(upload_to='products/')
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     # SEO fields
@@ -116,6 +118,8 @@ class Product(models.Model):
     meta_description = models.TextField(blank=True, null=True)
     og_title = models.CharField(max_length=255, blank=True, null=True)
     og_description = models.TextField(blank=True, null=True)
+    twitter_title = models.CharField(max_length=255, blank=True, null=True)
+    twitter_description = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -124,6 +128,14 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class ProductGallery(models.Model):
+    product = models.ForeignKey(Product, related_name='gallery_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/gallery/')
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.alt_text or 'Gallery Image'}"
 
 
 class Banner(models.Model):
@@ -134,6 +146,7 @@ class Banner(models.Model):
         validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])],
         help_text="Upload a banner image (JPG, PNG, WEBP)."
     )
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
     enquiry_button_text = models.CharField(max_length=100, default='Enquire Now', help_text="Text shown on the enquiry button.")
     enquiry_button_link = models.URLField(help_text="URL the enquiry button should link to.")
 
@@ -146,6 +159,7 @@ class Blog(models.Model):
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to='blog_images/')
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
     # category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE, related_name='blogs', blank=True)
     meta_title = models.CharField(max_length=255, help_text="Meta title for SEO", blank=True)
     meta_description = models.TextField(help_text="Meta description for SEO", blank=True)

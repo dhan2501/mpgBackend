@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute, ContactDetail
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute, ContactDetail, ProductGallery
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
@@ -32,9 +32,13 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAttributeInline(admin.TabularInline):
     model = ProductAttribute
     extra = 1
+
+class ProductGalleryInline(admin.TabularInline):
+    model = ProductGallery
+    extra = 1
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductAttributeInline]
+    inlines = [ProductAttributeInline, ProductGalleryInline]
     list_display = ('id', 'image_tag', 'name', 'category', 'short_description')  # 👈 Add image_tag here
     list_display_links = ('image_tag', 'name')  # Make 'id' and 'name' clickable
     list_filter = ['category']
@@ -50,7 +54,6 @@ class ProductAdmin(admin.ModelAdmin):
         words = obj.description.split()[:20]  # Split the description into words and take the first 20
         return ' '.join(words)  # Join the words back into a string
     short_description.short_description = 'Description'  # Set the column name to 'Description'
-
 
 
 @admin.register(MenuItem)

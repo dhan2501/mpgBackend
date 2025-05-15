@@ -154,6 +154,13 @@ def product_list_api(request):
             {"title": attr.title, "value": attr.value}
             for attr in product.attributes.all()
         ]
+        gallery = [
+            {
+                "image": request.build_absolute_uri(img.image.url),
+                "alt_text": img.alt_text
+            }
+            for img in product.gallery_images.all()
+        ]
         data.append({
             "id": product.id,
             "name": product.name,
@@ -166,6 +173,7 @@ def product_list_api(request):
             "og_title": product.og_title,
             "og_decriptions": product.og_description,
             "attributes": attributes,
+            "gallery_images": gallery,
         })
 
     return JsonResponse(data, safe=False)
@@ -182,6 +190,7 @@ def category_list(request):
             "id": category.id,
             "category_name": category.category_name,
             "slug": category.slug,
+            "alt_text" : category.alt_text,
             "image": request.build_absolute_uri(category.image.url) if category.image else None,
             "short_description" : category.short_description,
             "descriptions" : category.description,
@@ -203,6 +212,7 @@ def banner_api(request):
             "title": banner.title,
             "subtitle": banner.subtitle,
             "image": image_url,
+            "alt_text" : banner.alt_text,
             "enquiry_button_text": banner.enquiry_button_text,
             "enquiry_button_link": banner.enquiry_button_link,
         })
@@ -222,6 +232,7 @@ def blog_list(request):
             "slug": blog.slug,
             "description": blog.description,
             "image": image_url,
+            "alt_text" : blog.alt_text,
             "meta_title": blog.meta_title,
             "meta_description": blog.meta_description,
             "content": blog.content,
