@@ -20,6 +20,7 @@ from .serializers import ReviewSerializer, ContactMessageSerializer, ContactDeta
 from django.utils.timezone import now
 
 from django.views.decorators.http import require_GET
+from django.utils import timezone
 
 def index(request):
     return render(request, "index.html")
@@ -265,25 +266,58 @@ def product_api(request, pk):
     return JsonResponse(data)
 
     
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
+@csrf_exempt
 def reviews_list(request):
     """
     GET /api/reviews/?product_id=3
-    Returns a list of reviews.
-    If product_id is provided, filters reviews by product.
+    - Returns a list of reviews.
+    - If product_id is provided, filters reviews by product.
+
+    POST /api/reviews/
+    - Creates a new review.
+    - Required fields: product_id, user_name, rating, comment
     """
-    product_id = request.GET.get('product_id')
+    if request.method == 'GET':
+        product_id = request.GET.get('product_id')
 
-    if product_id:
+        if product_id:
+            try:
+                product_id = int(product_id)
+                reviews = ProductReview.objects.filter(product_id=product_id).values()
+            except ValueError:
+                return JsonResponse({"error": "Invalid product_id"}, status=400)
+        else:
+            reviews = ProductReview.objects.all().values()
+
+        return JsonResponse(list(reviews), safe=False)
+
+    elif request.method == 'POST':
         try:
-            product_id = int(product_id)
-            reviews = ProductReview.objects.filter(product_id=product_id).values()
-        except ValueError:
-            return JsonResponse({"error": "Invalid product_id"}, status=400)
-    else:
-        reviews = ProductReview.objects.all().values()
+            data = json.loads(request.body)
+            product_id = data.get('product_id')
+            name = data.get('name')
+            rating = data.get('rating')
+            comment = data.get('comment')
 
-    return JsonResponse(list(reviews), safe=False)
+            # Basic validation
+            if not all([product_id, name, rating, comment]):
+                return JsonResponse({"error": "Missing required fields"}, status=400)
+
+            review = ProductReview.objects.create(
+                product_id=product_id,
+                name=name,
+                rating=rating,
+                comment=comment,
+                created_at=timezone.now()
+            )
+
+            return JsonResponse({"success": True, "review_id": review.id}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
 
 
 @api_view(['GET'])
