@@ -174,7 +174,7 @@ def product_list_api(request):
             "og_title": product.og_title,
             "og_decriptions": product.og_description,
             "attributes": attributes,
-            "gallery_images": gallery, 
+            "gallery_images": gallery,
         })
 
     return JsonResponse(data, safe=False)
