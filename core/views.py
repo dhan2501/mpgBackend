@@ -271,8 +271,28 @@ def product_api(request, pk):
 #     reviews = list(ProductReview.objects.values())
 #     return JsonResponse(reviews, safe=False)
 
+# @api_view(['GET'])
+# def reviews_list(request):
+#     product_id = request.GET.get('product_id')
+
+#     if product_id:
+#         try:
+#             product_id = int(product_id)
+#             reviews = ProductReview.objects.filter(product_id=product_id).values()
+#         except ValueError:
+#             return JsonResponse({"error": "Invalid product_id"}, status=400)
+#     else:
+#         reviews = ProductReview.objects.all().values()
+
+#     return JsonResponse(list(reviews), safe=False)
+
 @api_view(['GET'])
 def reviews_list(request):
+    """
+    GET /api/reviews/?product_id=3
+    Returns a list of reviews.
+    If product_id is provided, filters reviews by product.
+    """
     product_id = request.GET.get('product_id')
 
     if product_id:
