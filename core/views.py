@@ -361,7 +361,7 @@ def submit_review(request):
             email=email,
             comment=comment,
             is_active=False
-        )
+        ) 
         success = True  # trigger popup
 
     return render(request, 'reviews/review_form.html', {'success': success})
