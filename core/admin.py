@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute, ContactDetail, ProductGallery
+from .models import Product, MenuItem, SocialMediaLink, Category, Banner, Blog, ProductReview, Subscriber, Testimonial, ContactMessage, ProductAttribute, ContactDetail, ProductGallery, Enquiry
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.safestring import mark_safe
@@ -164,3 +164,9 @@ class ContactDetailAdmin(admin.ModelAdmin):
     def display_emails(self, obj):
         return ", ".join(obj.get_email_list())
     display_emails.short_description = 'Email Addresses'
+
+
+@admin.register(Enquiry)
+class EnquiryAdmin(admin.ModelAdmin):
+    list_display = ('product_name', 'name', 'email', 'contact_number', 'created_at')
+    search_fields = ('product_name', 'name', 'email')

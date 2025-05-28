@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 import json
-from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute, SocialMediaLink, ContactDetail
+from .models import Product, Banner, Category, MenuItem, Blog, ProductReview, Subscriber, Testimonial,ProductAttribute, SocialMediaLink, ContactDetail, Enquiry
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ProductReview
 from django.views.decorators.csrf import csrf_exempt
@@ -533,3 +533,36 @@ class ContactDetailView(generics.RetrieveAPIView):
     def get_object(self):
         # Return the first ContactDetail entry
         return ContactDetail.objects.first()
+    
+
+@csrf_exempt
+def post_enquiry_api(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            product_name = data.get('product_name')
+            name = data.get('name')
+            email = data.get('email')
+            contact_number = data.get('contact_number')
+            message = data.get('message')
+
+            # Basic validation
+            if not all([product_name, name, email, contact_number, message]):
+                return JsonResponse({'error': 'All fields are required.'}, status=400)
+
+            # Save enquiry
+            Enquiry.objects.create(
+                product_name=product_name,
+                name=name,
+                email=email,
+                contact_number=contact_number,
+                message=message
+            )
+
+            return JsonResponse({'message': 'Enquiry submitted successfully.'}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON.'}, status=400)
+
+    return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)

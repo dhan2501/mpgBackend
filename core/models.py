@@ -242,3 +242,16 @@ class ContactDetail(models.Model):
 
     def __str__(self):
         return f"{self.phones} - {self.emails}"
+    
+
+class Enquiry(models.Model):
+    product_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    contact_number = models.CharField(max_length=20)
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Enquiry by {self.name} for {self.product_name}'
