@@ -21,6 +21,7 @@ from django.utils.timezone import now
 
 from django.views.decorators.http import require_GET
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 def index(request):
     return render(request, "index.html")
@@ -535,7 +536,40 @@ class ContactDetailView(generics.RetrieveAPIView):
         return ContactDetail.objects.first()
     
 
+# @csrf_exempt
+# def post_enquiry_api(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+
+#             product_name = data.get('product_name')
+#             name = data.get('name')
+#             email = data.get('email')
+#             contact_number = data.get('contact_number')
+#             message = data.get('message')
+
+#             # Basic validation
+#             if not all([product_name, name, email, contact_number, message]):
+#                 return JsonResponse({'error': 'All fields are required.'}, status=400)
+
+#             # Save enquiry
+#             Enquiry.objects.create(
+#                 product_name=product_name,
+#                 name=name,
+#                 email=email,
+#                 contact_number=contact_number,
+#                 message=message
+#             )
+
+#             return JsonResponse({'message': 'Enquiry submitted successfully.'}, status=201)
+
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON.'}, status=400)
+
+#     return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
+
 @csrf_exempt
+@require_http_methods(["GET", "POST"])
 def post_enquiry_api(request):
     if request.method == 'POST':
         try:
@@ -565,4 +599,17 @@ def post_enquiry_api(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON.'}, status=400)
 
-    return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
+    elif request.method == 'GET':
+        enquiries = Enquiry.objects.all().order_by('-created_at')
+        data = []
+        for enquiry in enquiries:
+            data.append({
+                'id': enquiry.id,
+                'product_name': enquiry.product_name,
+                'name': enquiry.name,
+                'email': enquiry.email,
+                'contact_number': enquiry.contact_number,
+                'message': enquiry.message,
+                'created_at': enquiry.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            })
+        return JsonResponse(data, safe=False)
