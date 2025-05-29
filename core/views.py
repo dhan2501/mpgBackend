@@ -298,16 +298,18 @@ def reviews_list(request):
             data = json.loads(request.body)
             product_id = data.get('product_id')
             name = data.get('name')
+            email = data.get('email')
             rating = data.get('rating')
             comment = data.get('comment')
 
             # Basic validation
-            if not all([product_id, name, rating, comment]):
+            if not all([product_id, name, email, rating, comment]):
                 return JsonResponse({"error": "Missing required fields"}, status=400)
 
             review = ProductReview.objects.create(
                 product_id=product_id,
                 name=name,
+                email = email,
                 rating=rating,
                 comment=comment,
                 created_at=timezone.now()
