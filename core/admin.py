@@ -168,5 +168,5 @@ class ContactDetailAdmin(admin.ModelAdmin):
 
 @admin.register(Enquiry)
 class EnquiryAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'name', 'email', 'contact_number', 'created_at')
+    list_display = ('product_name', 'name', 'email', 'phone_number', 'created_at')
     search_fields = ('product_name', 'name', 'email')

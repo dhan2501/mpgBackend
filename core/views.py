@@ -277,7 +277,7 @@ def reviews_list(request):
 
     POST /api/reviews/
     - Creates a new review.
-    - Required fields: product_id, user_name, rating, comment
+    - Required fields: product_id, user_name, email, rating, comment
     """
     if request.method == 'GET':
         product_id = request.GET.get('product_id')
@@ -580,11 +580,11 @@ def post_enquiry_api(request):
             product_name = data.get('product_name')
             name = data.get('name')
             email = data.get('email')
-            contact_number = data.get('contact_number')
+            phone_number = data.get('phone_number')
             message = data.get('message')
 
             # Basic validation
-            if not all([product_name, name, email, contact_number, message]):
+            if not all([product_name, name, email, phone_number, message]):
                 return JsonResponse({'error': 'All fields are required.'}, status=400)
 
             # Save enquiry
@@ -592,7 +592,7 @@ def post_enquiry_api(request):
                 product_name=product_name,
                 name=name,
                 email=email,
-                contact_number=contact_number,
+                phone_number=phone_number,
                 message=message
             )
 
@@ -610,7 +610,7 @@ def post_enquiry_api(request):
                 'product_name': enquiry.product_name,
                 'name': enquiry.name,
                 'email': enquiry.email,
-                'contact_number': enquiry.contact_number,
+                'phone_number': enquiry.phone_number,
                 'message': enquiry.message,
                 'created_at': enquiry.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             })
